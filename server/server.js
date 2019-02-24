@@ -16,21 +16,20 @@ app.use(express.static(publicPath));
 //provide a callback function to hande the connectio
 io.on('connection', function(socket){
     console.log('New user connected');
-
-    socket.emit('newMessage', {
-        from: 'mike@example.com',
-        text: 'Hey, hey from server',
-        createAt: 123
-
-    });
-    
+  
     socket.on('createMessage', (message)=>{
         console.log('createMessage', message);
+        //emits an event to every single connection
+        io.emit('newMessage', {
+            from: message.from,
+            text: message.text,
+            createdAt: new Date().getTime()
+        });
     });
 
     socket.on('disconnect', ()=>{
         console.log('User was disconnected');
-    })
+    });
 });
 
 server.listen(3000, ()=>{

@@ -16,15 +16,35 @@ app.use(express.static(publicPath));
 //provide a callback function to hande the connectio
 io.on('connection', function(socket){
     console.log('New user connected');
-  
+    //socket.emit from Admin text Welcome to thte caht app
+    socket.emit('newMessage', {
+        from: 'Admin',
+        text: 'Welcome to the chat app'
+    });
+
+    //socket.broadcast.emit from Admin text New user joined
+    socket.broadcast.emit('newMessage', {
+        from: 'Admin',
+        text: 'New user joined',
+        createdAt: new Date().getTime()
+    });
+    
     socket.on('createMessage', (message)=>{
         console.log('createMessage', message);
         //emits an event to every single connection
+
         io.emit('newMessage', {
             from: message.from,
             text: message.text,
             createdAt: new Date().getTime()
         });
+
+        //gonaa emit the message to everyone but not himselft
+        // socket.broadcast.emit('newMessage', {
+        //     from: message.from,
+        //     text: message.text,
+        //     createdAt: new Date().getTime()
+        // });
     });
 
     socket.on('disconnect', ()=>{

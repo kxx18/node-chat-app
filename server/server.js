@@ -23,11 +23,12 @@ io.on('connection', function(socket){
     //socket.broadcast.emit from Admin text New user joined
     socket.broadcast.emit('newMessage', generateMessage('Admin', 'New user joined'));
     
-    socket.on('createMessage', (message)=>{
+    socket.on('createMessage', (message, callback)=>{
         console.log('createMessage', message);
         //emits an event to every single connection
-        io.emit('newMessage', generateMessage(messge.from, messsage.text));
-
+        io.emit('newMessage', generateMessage(message.from, message.text));
+        callback('This is from the server');
+        
         //gonaa emit the message to everyone but not himselft
         // socket.broadcast.emit('newMessage', {
         //     from: message.from,
@@ -43,6 +44,6 @@ io.on('connection', function(socket){
 
 server.listen(3000, ()=>{
     console.log(`Server is up on port ${port}`);
-});
+}); //112
 
 

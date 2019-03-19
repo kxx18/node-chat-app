@@ -28,13 +28,10 @@ io.on('connection', function(socket){
         //emits an event to every single connection
         io.emit('newMessage', generateMessage(message.from, message.text));
         callback('This is from the server');
-        
-        //gonaa emit the message to everyone but not himselft
-        // socket.broadcast.emit('newMessage', {
-        //     from: message.from,
-        //     text: message.text,
-        //     createdAt: new Date().getTime()
-        // });
+     
+    });
+    socket.on('createLocationMessage', (coords)=>{
+        io.emit('newMessage', generateMessage('Admin', `${coords.latitude}, ${coords.longitude}`))
     });
 
     socket.on('disconnect', ()=>{
